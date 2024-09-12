@@ -3,7 +3,7 @@ services:
     name: my-laravel-app
     env: docker
     build:
-      dockerfile_path: project_tracking/Dockerfile
+      dockerfile_path: Dockerfile
       root_dir: project_tracking
     plan: free
     ports:
