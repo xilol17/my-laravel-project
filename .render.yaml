@@ -12,11 +12,11 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_KEY
-        value: <YOUR_APP_KEY>  # Replace this with your actual Laravel application key
+        value: <base64:WEoOSDf3kW5Xgv7DzJz6iED6ND3SawLRxbLCn6pU95E=>  # Replace this with your actual Laravel application key
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        value: db  # Ensure this matches the name of your MySQL service
+        value: 127.0.0.1  # Ensure this matches the name of your MySQL service
       - key: DB_PORT
         value: 3306
       - key: DB_DATABASE
