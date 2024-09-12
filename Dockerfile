@@ -1,35 +1,24 @@
-# 使用官方 PHP 镜像作为基础镜像
 FROM php:8.1-fpm
 
-# 安装系统依赖和 PHP 扩展
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    unzip \
-    git \
-    libonig-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip pdo pdo_mysql
+# Install dependencies
+RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev libzip-dev unzip libxml2-dev
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install gd zip xml
 
-# 设置工作目录
-WORKDIR /var/www/html
+# Set working directory
+WORKDIR /var/www
 
-# 复制应用代码到容器中
+# Copy application files
 COPY . .
 
-# 安装 Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 安装项目依赖
-RUN composer install
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# 生成应用密钥
-RUN php artisan key:generate
-
-# 暴露容器的 9000 端口
+# Expose port
 EXPOSE 9000
 
-# 启动 PHP-FPM 服务
+# Start the PHP server
 CMD ["php-fpm"]
